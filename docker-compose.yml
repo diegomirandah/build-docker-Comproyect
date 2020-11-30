@@ -1,0 +1,41 @@
+version: '3'
+services:
+  mongodb:
+    image: mongo:4.4.0
+    restart: always
+    networks:
+     - red_privada
+    expose:
+     - ${SERVER_MONGO_PORT}
+    volumes:
+     - db-data:/data/db
+  
+  webapp:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+       - HOST_DB=${SERVER_MONGO_HOST}
+       - PORT_DB=${SERVER_MONGO_PORT}
+    restart: always
+    expose:
+     - ${SERVER_WEB_PORT}
+    ports:
+     - "50000-50004:5000-5004/udp"
+    networks:
+     - red_proxy
+     - red_privada
+    depends_on:
+     - mongodb
+    environment:
+      VIRTUAL_HOST: localhost
+
+
+volumes:
+  db-data:
+
+networks:
+  red_proxy:
+    external:
+      name: nginx-proxy
+  red_privada:

@@ -1,0 +1,6 @@
+Flask==1.1.1
+opencv-python==3.4.5.20
+pandas==1.0.1
+pymongo==3.11.0
+PyAudio==0.2.11
+webrtcvad==2.0.10
